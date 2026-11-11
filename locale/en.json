@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "ArcGIS Pro Bridge",
+    "description": "Drive ArcGIS Pro from Harness through a persistent arcpy bridge: 87 tools over 1977 geoprocessing tools, .aprx projects, maps, layers, layouts, feature classes and licensing."
+  }
+}

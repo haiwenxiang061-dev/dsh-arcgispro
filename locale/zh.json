@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "ArcGIS Pro 桥",
+    "description": "让 Harness 直接操作 ArcGIS Pro：常驻 arcpy 桥提供 87 个工具，覆盖 1977 个 GP 工具、.aprx 工程、地图、图层、布局出图、要素类与许可管理。"
+  }
+}
