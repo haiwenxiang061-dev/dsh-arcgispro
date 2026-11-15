@@ -28,21 +28,21 @@ dsh plugin --profile desktop add dsh-arcgispro
 装完刷新页面即生效，插件出现在「设置 → 插件」里，行内标注 **ArcGIS Pro 桥**。
 需要宿主里已有 `plugin_manager`（`dsh-base` 自带）。
 
-npm 上已发布 `0.1.0`，用 `npm view dsh-arcgispro version` 可查最新版。
+npm 上已发布 `0.1.1`，用 `npm view dsh-arcgispro version` 可查最新版。
 
 ### 方式二：从 GitHub 安装（不走 npm 时用）
 
 钉住 tag 的 tarball 地址，下载后直接解包安装，不需要 git 传输：
 
 ```bash
-dsh plugin --profile web add https://codeload.github.com/haiwenxiang061-dev/dsh-arcgispro/tar.gz/refs/tags/v0.1.0
-dsh plugin --profile desktop add https://codeload.github.com/haiwenxiang061-dev/dsh-arcgispro/tar.gz/refs/tags/v0.1.0
+dsh plugin --profile web add https://codeload.github.com/haiwenxiang061-dev/dsh-arcgispro/tar.gz/refs/tags/v0.1.1
+dsh plugin --profile desktop add https://codeload.github.com/haiwenxiang061-dev/dsh-arcgispro/tar.gz/refs/tags/v0.1.1
 ```
 
 Release 里也挂了同一份 `.tgz` 附件，想用 GitHub 的下载页可以换成：
 
 ```bash
-dsh plugin --profile desktop add https://github.com/haiwenxiang061-dev/dsh-arcgispro/releases/download/v0.1.0/dsh-arcgispro-0.1.0.tgz
+dsh plugin --profile desktop add https://github.com/haiwenxiang061-dev/dsh-arcgispro/releases/download/v0.1.1/dsh-arcgispro-0.1.1.tgz
 ```
 
 两点实测注意：
