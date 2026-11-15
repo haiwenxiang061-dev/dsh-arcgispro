@@ -1,6 +1,6 @@
 {
   "name": "dsh-arcgispro",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Operate ArcGIS Pro from DeepSeek Harness: a persistent arcpy bridge that drives 1977 geoprocessing tools, .aprx projects, maps, layers, layouts, data tables and licensing.",
   "type": "module",
   "main": "index.js",

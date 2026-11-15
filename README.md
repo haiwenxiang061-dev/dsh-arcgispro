@@ -28,21 +28,21 @@ dsh plugin --profile desktop add dsh-arcgispro
 装完刷新页面即生效，插件出现在「设置 → 插件」里，行内标注 **ArcGIS Pro 桥**。
 需要宿主里已有 `plugin_manager`（`dsh-base` 自带）。
 
-npm 上已发布 `0.1.1`，用 `npm view dsh-arcgispro version` 可查最新版。
+npm 上已发布 `0.1.2`，用 `npm view dsh-arcgispro version` 可查最新版。
 
 ### 方式二：从 GitHub 安装（不走 npm 时用）
 
 钉住 tag 的 tarball 地址，下载后直接解包安装，不需要 git 传输：
 
 ```bash
-dsh plugin --profile web add https://codeload.github.com/haiwenxiang061-dev/dsh-arcgispro/tar.gz/refs/tags/v0.1.1
-dsh plugin --profile desktop add https://codeload.github.com/haiwenxiang061-dev/dsh-arcgispro/tar.gz/refs/tags/v0.1.1
+dsh plugin --profile web add https://codeload.github.com/haiwenxiang061-dev/dsh-arcgispro/tar.gz/refs/tags/v0.1.2
+dsh plugin --profile desktop add https://codeload.github.com/haiwenxiang061-dev/dsh-arcgispro/tar.gz/refs/tags/v0.1.2
 ```
 
 Release 里也挂了同一份 `.tgz` 附件，想用 GitHub 的下载页可以换成：
 
 ```bash
-dsh plugin --profile desktop add https://github.com/haiwenxiang061-dev/dsh-arcgispro/releases/download/v0.1.1/dsh-arcgispro-0.1.1.tgz
+dsh plugin --profile desktop add https://github.com/haiwenxiang061-dev/dsh-arcgispro/releases/download/v0.1.2/dsh-arcgispro-0.1.2.tgz
 ```
 
 两点实测注意：
@@ -172,10 +172,24 @@ arcgis_project_open  → arcgis_layer_update（定义查询/可见性）→ arcg
 | --- | --- |
 | DSH 版本 | 0.2.x，`dsh.bundle.patch` + 导出 `apply(ctx)` |
 | 平台 | Windows（arcpy 与 ArcGIS Pro 仅 Windows 版） |
-| 外部依赖 | 本机已安装 ArcGIS Pro 3.x；Python 解释器由插件按 `python` 配置 → `DSH_ARCGISPRO_PYTHON` → 注册表 → 常见安装路径自动定位 |
+| ArcGIS Pro 版本 | **3.0 – 3.6**（实测基线 3.6.0.59527 / Python 3.13.7 / arcpy 3.6；3.2 及以上功能完整） |
+| 外部依赖 | 本机已安装上述版本的 ArcGIS Pro；Python 解释器由插件按 `python` 配置 → `DSH_ARCGISPRO_PYTHON` → 注册表 → 常见安装路径自动定位 |
 | 权限 | 启动一个常驻 Python 子进程执行 arcpy；写盘与改工程类工具（`arcgis_python`、`arcgis_data_*`、`arcgis_layout_export`、`arcgis_project_save` 等）要求 `writeAllowed: true`，缺省只读 |
 | 网络 | 插件自身不联网；只有 ArcGIS 加载在线底图时由 Pro 联网 |
 | 许可证 | MIT |
+
+### ArcGIS Pro 版本区间怎么来的
+
+插件自身不做版本判断——它只找得到哪个 `arcgispro-py3` 就用哪个。下面的区间是**按代码实际调用的 arcpy API 反推**出来的，不是猜的：
+
+| 依据 | 说明 |
+| --- | --- |
+| 下限 3.0 | 代码里所有 CIM 读写都写死 `'V3'`（`py/ops_layer.py:486` 的 `one_map.getDefinition("V3")`、`py/ops_project.py:1115` 的 `series.getDefinition("V3")`）。`V3` 是 Pro 3.x 的 CIM 版本，2.x 只有 `'V2'`，所以 2.x 直接不成立 |
+| 完整功能从 3.2 起 | `MapSeries`、`MapFrame`、`Layout` 元素级 `getDefinition`/`setDefinition` 是 **Pro 3.2** 才补齐的（Esri 官方 Python CIM access 文档明确写「At ArcGIS Pro 3.2, the number of classes that support the getDefinition and setDefinition methods were expanded」）。在 3.0/3.1 上 `arcgis_mapseries_info` 的 `definition` 字段会缺失，其余工具正常 |
+| 实测基线 3.6 | 全部 87 个工具、`createMap` 耗时、GP 工具 1977 个、许可与扩展清单都在 Pro **3.6.0.59527 / Python 3.13.7 / arcpy 3.6** 上逐个跑过 |
+| 3.7 及以上 | 未验证。Esri 在 3.6→3.7 之间会改系统样式的 name 值（官方建议按 `key` 引用），本插件的符号工具按名字取色带，可能出现取不到的情况——遇到请开 issue 附版本号 |
+
+插件脚本是纯 Python 3 语法（`ast.parse` 逐档验证到 `feature_version=(3, 6)` 均通过），所以 Pro 换 Python 解释器版本不会成为障碍；真正的边界是上面的 arcpy API 与 CIM 版本。
 
 ## 测试
 ```
